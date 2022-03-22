@@ -14,8 +14,8 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "hashicorp/bionic64"
 
-  config.vm.hostname = "devious_box"
-  config.vm.define "devious_box"
+  config.vm.hostname = "devious-box"
+  config.vm.define "devious-box"
   
 
   # Disable automatic box update checking. If you disable this, then
