@@ -76,6 +76,8 @@ Vagrant.configure("2") do |config|
     sudo apt install -y postgresql postgresql-contrib
     sudo systemctl start postgresql.service
     sudo apt-get install -y python
+    sudo mkdir working
+    ssh-keygen -t id_rsa -b 2048
     # make a directory for our work in the vagrant box
     # check postgresql installed correctly.
     # ssh key and git setup for github connection
