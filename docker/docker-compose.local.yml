@@ -1,0 +1,11 @@
+version: "3"
+services:
+  devious:
+    build:
+      context: devious
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+        TARGET_BRANCH: dev
+    ports:
+      - "8001:80"
