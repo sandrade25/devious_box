@@ -6,6 +6,7 @@ LABEL name="eldorado"
 
 ENV TERM xterm
 ENV container docker
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Set timezone:
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
@@ -49,21 +50,23 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     bash-completion \
+    dos2unix \
     --no-install-recommends
 
 # setup python
 RUN cd /usr/local/bin && ln -s /usr/bin/python3 python
 RUN pip3 install --upgrade pip
 
-# circus
-RUN pip install circus
-COPY conf/circus_local.ini /srv/circus_local.ini
-
+# quick update
+RUN apt-get update
 
 # copy config files
 COPY conf/mime.types /usr/local/etc/mime/types
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/circus_local.ini /srv/circus_local.ini
+
+# vim setup
+RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 
 # github keys. Pull this from a local server with limited access. For now files stored locally copied over. and ignored in git
@@ -77,17 +80,27 @@ RUN ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 # vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+# circus
+RUN pip install circus
+COPY conf/circus_local.ini /srv/circus_local.ini
+
 # logging
 RUN mkdir -p /var/log/eldorado/
 RUN chown www-data:www-data /var/log/eldorado
 
+# clone down app code
 RUN git clone git@github.com:sandrade25/eldorado.git /var/www/eldorado
-COPY app_local.ini /var/www/eldorado/app/conf/app_local.ini
+COPY conf/app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
 WORKDIR /var/www/eldorado/
 
-# local setup
+# copy local setup script
 COPY scripts/local_setup.sh /tmp/local_setup.sh
+
+# replace windows \r
+RUN dos2unix /tmp/local_setup.sh
+
+# run local setup
 RUN /tmp/local_setup.sh $ENVIRONMENT
 RUN rm /tmp/local_setup.sh
 

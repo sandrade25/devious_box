@@ -7,5 +7,9 @@ services:
       args:
         ENVIRONMENT: local
         TARGET_BRANCH: main
+    environment:
+      - WAIT_TIMEOUT=60
+      - WAIT_BEFORE=30
     ports:
       - "8001:80"
+    command: sh -c "/wait && circusd /srv/circus.ini --log-output /var/log/circusd.log"
