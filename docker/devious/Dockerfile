@@ -59,6 +59,12 @@ RUN pip3 install --upgrade pip
 RUN pip install circus
 COPY conf/circus_local.ini /srv/circus_local.ini
 
+
+# copy config files
+COPY conf/mime.types /usr/local/etc/mime/types
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/circus_local.ini /srv/circus_local.ini
+
 # vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
