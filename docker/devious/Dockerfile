@@ -1,9 +1,15 @@
 # syntax=docker/dockerfile:1
 FROM ubuntu:20.04
+
 LABEL maintainers="SydDevious"
+LABEL name="eldorado"
 
 ENV TERM xterm
 ENV container docker
+
+# Set timezone:
+RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+
 
 RUN apt-get update && apt-get install -y \
     curl \
@@ -45,11 +51,16 @@ RUN apt-get update && apt-get install -y \
     bash-completion \
     --no-install-recommends
 
-
+# setup python
 RUN cd /usr/local/bin && ln -s /usr/bin/python3 python
 RUN pip3 install --upgrade pip
 
+# vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+# logging
+RUN mkdir -p /var/log/eldorado/
+RUN chown www-data:www-data /var/log/eldorado
 
-
+WORKDIR /var/www/eldorado/
+EXPOSE 80
