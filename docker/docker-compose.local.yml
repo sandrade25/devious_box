@@ -6,6 +6,6 @@ services:
       dockerfile: Dockerfile
       args:
         ENVIRONMENT: local
-        TARGET_BRANCH: dev
+        TARGET_BRANCH: main
     ports:
       - "8001:80"

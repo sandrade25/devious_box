@@ -65,6 +65,15 @@ COPY conf/mime.types /usr/local/etc/mime/types
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/circus_local.ini /srv/circus_local.ini
 
+
+# github keys. Pull this from a local server with limited access. For now files stored locally copied over. and ignored in git
+COPY conf/github.priv /root/.ssh/id_rsa
+COPY conf/github.pub /root/.ssh/id_rsa.pub
+COPY conf/github.pub /root/.ssh/authorized_keys
+
+RUN chmod 0600 /root/.ssh/id_rsa /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+RUN ssh-keyscan -H github.com >> /root/.ssh/known_hosts
+
 # vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
@@ -72,7 +81,7 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubuserconte
 RUN mkdir -p /var/log/eldorado/
 RUN chown www-data:www-data /var/log/eldorado
 
-RUN git clone --branch $TARGET_BRANCH --depth 1 git@github.com:sandrade25/eldorado.git /var/www/eldorado
+RUN git clone git@github.com:sandrade25/eldorado.git /var/www/eldorado
 COPY app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
 WORKDIR /var/www/eldorado/

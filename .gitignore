@@ -1,2 +1,4 @@
 .vagrant/
 *.ini
+*.pub
+*.priv
