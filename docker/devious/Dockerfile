@@ -55,6 +55,10 @@ RUN apt-get update && apt-get install -y \
 RUN cd /usr/local/bin && ln -s /usr/bin/python3 python
 RUN pip3 install --upgrade pip
 
+# circus
+RUN pip install circus
+COPY conf/circus_local.ini /srv/circus_local.ini
+
 # vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
@@ -62,5 +66,15 @@ RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubuserconte
 RUN mkdir -p /var/log/eldorado/
 RUN chown www-data:www-data /var/log/eldorado
 
+RUN git clone --branch $TARGET_BRANCH --depth 1 git@github.com:sandrade25/eldorado.git /var/www/eldorado
+COPY app_local.ini /var/www/eldorado/app/conf/app_local.ini
+
 WORKDIR /var/www/eldorado/
+
+# local setup
+COPY scripts/local_setup.sh /tmp/local_setup.sh
+RUN /tmp/local_setup.sh $ENVIRONMENT
+RUN rm /tmp/local_setup.sh
+
+
 EXPOSE 80
