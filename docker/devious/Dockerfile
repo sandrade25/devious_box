@@ -9,9 +9,10 @@ LABEL name="eldorado"
 ENV TERM xterm
 ENV container docker
 ARG DEBIAN_FRONTEND=noninteractive
+ARG ENVIRONMENT=local
 
-# Set timezone:
-RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
+# # Set timezone:
+# RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
 
 
 RUN apt-get update && apt-get install -y \
@@ -36,6 +37,7 @@ RUN apt-get update && apt-get install -y \
     libxmlsec1-dev \
     libxmlsec1-openssl \
     libzmq3-dev \
+    locales \
     lsof \
     nginx \
     openssh-server \
@@ -55,6 +57,20 @@ RUN apt-get update && apt-get install -y \
     dos2unix \
     --no-install-recommends
 
+
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8   
+
+# setup postgres
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN apt-get update
+RUN apt-get -y install postgresql-13
+
 # setup python
 RUN cd /usr/local/bin && ln -s /usr/bin/python3 python
 RUN pip3 install --upgrade pip
@@ -66,6 +82,7 @@ RUN apt-get update
 COPY conf/mime.types /usr/local/etc/mime/types
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/circus_local.ini /srv/circus_local.ini
+COPY conf/postgresql.conf /tmp/postgresql.conf
 
 # vim setup
 RUN curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -106,7 +123,7 @@ COPY scripts/local_setup.sh /tmp/local_setup.sh
 
 # run local setup
 RUN /tmp/local_setup.sh $ENVIRONMENT
-RUN rm /tmp/local_setup.sh
+# RUN rm /tmp/local_setup.sh
 
 
 EXPOSE 80
