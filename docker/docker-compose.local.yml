@@ -1,6 +1,6 @@
 version: "3"
 services:
-  devious:
+  eldorado:
     build:
       context: devious
       dockerfile: Dockerfile
@@ -11,5 +11,4 @@ services:
       - WAIT_TIMEOUT=60
       - WAIT_BEFORE=30
     ports:
-      - "8001:80"
-    command: sh -c "/wait && circusd /srv/circus.ini --log-output /var/log/circusd.log"
+      - "8000:80"

@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1
+
+# use LTS ubuntu
 FROM ubuntu:20.04
 
 LABEL maintainers="SydDevious"
@@ -88,17 +90,19 @@ COPY conf/circus_local.ini /srv/circus_local.ini
 RUN mkdir -p /var/log/eldorado/
 RUN chown www-data:www-data /var/log/eldorado
 
-# clone down app code
+# clone down app code and pip install packages
 RUN git clone git@github.com:sandrade25/eldorado.git /var/www/eldorado
 COPY conf/app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
 WORKDIR /var/www/eldorado/
 
+RUN pip install -r requirements.txt
+
 # copy local setup script
 COPY scripts/local_setup.sh /tmp/local_setup.sh
 
-# replace windows \r
-RUN dos2unix /tmp/local_setup.sh
+# # replace windows \r
+# RUN dos2unix /tmp/local_setup.sh
 
 # run local setup
 RUN /tmp/local_setup.sh $ENVIRONMENT
@@ -106,3 +110,6 @@ RUN rm /tmp/local_setup.sh
 
 
 EXPOSE 80
+
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
+
