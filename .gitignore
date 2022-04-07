@@ -2,3 +2,4 @@
 *.ini
 *.pub
 *.priv
+!*circus_local.ini
