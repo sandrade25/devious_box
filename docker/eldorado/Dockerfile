@@ -55,6 +55,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     bash-completion \
     dos2unix \
+    libcairo2-dev \
+    libjpeg-dev \
+    libgif-dev \
+    libpango1.0-dev \
     --no-install-recommends
 
 
@@ -111,8 +115,11 @@ RUN chown www-data:www-data /var/log/eldorado
 RUN git clone git@github.com:sandrade25/eldorado.git /var/www/eldorado
 COPY conf/app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
+
 WORKDIR /var/www/eldorado/
 
+
+RUN git pull
 RUN pip install -r requirements.txt
 
 # copy local setup script
@@ -126,7 +133,9 @@ RUN /tmp/local_setup.sh $ENVIRONMENT
 # RUN rm /tmp/local_setup.sh
 
 
-EXPOSE 80
 
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "80"]
+
+EXPOSE 8080
+
+CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
 
