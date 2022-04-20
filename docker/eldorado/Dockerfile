@@ -59,6 +59,8 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libgif-dev \
     libpango1.0-dev \
+    mongodb \
+    iputils-ping \
     --no-install-recommends
 
 
