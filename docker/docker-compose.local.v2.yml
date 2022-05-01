@@ -13,7 +13,7 @@ services:
       - postgres_db
       - mongo_db
     environment:
-      - WAIT_HOSTS=postgres_db:5432, dynamo_db:8000, mongo_db:8081
+      - WAIT_HOSTS=postgres_db:5432, dynamo_db:8000, mongo_db:27017
       - WAIT_TIMEOUT=60
       - WAIT_BEFORE=30
       - AWS_ACCESS_KEY_ID='FakeAccessKey'
@@ -63,9 +63,8 @@ services:
   mongo_db:
     # https://hub.docker.com/_/mongo
     image: mongo
-    restart: always
-    command: --serviceExecutor adaptive
     environment:
+      MONGO_INITDB_DATABASE: eldorado
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     container_name: mongo_db
