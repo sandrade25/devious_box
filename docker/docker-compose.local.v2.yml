@@ -73,6 +73,23 @@ services:
     networks:
       customnetwork:
         ipv4_address: 172.20.0.13
+
+
+  challenges:
+    container_name: challenges
+    build:
+      context: challenges
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+        TARGET_BRANCH: main
+    environment:
+      - ENVIRONMENT='local'
+    ports:
+      - "8001:8001"
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.14
       
 
 networks:
