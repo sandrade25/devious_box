@@ -35,6 +35,7 @@ services:
   postgres_db:
     # https://hub.docker.com/_/postgres
     image: postgres
+    container_name: postgres_db
     restart: always
     environment:
       POSTGRES_PASSWORD: chel
