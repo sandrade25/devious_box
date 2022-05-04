@@ -115,7 +115,7 @@ RUN /tmp/local_setup.sh $ENVIRONMENT
 
 
 
-EXPOSE 8080
+EXPOSE 8001
 
-CMD ["uvicorn", "app.main:app", "--proxy-headers", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["tail", "-f", "/dev/null"]
 

@@ -119,7 +119,7 @@ COPY conf/app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
 
 WORKDIR /var/www/eldorado/
-
+ENV PATH="/usr/bin/python3:${PATH}"
 
 RUN git pull
 RUN pip install -r requirements.txt
