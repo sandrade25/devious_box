@@ -119,7 +119,7 @@ COPY conf/app_local.ini /var/www/eldorado/app/conf/app_local.ini
 
 
 WORKDIR /var/www/eldorado/
-ENV PATH="/usr/bin/python3:${PATH}"
+ENV PATH="/var/www/eldorado/:/usr/bin/python3:${PATH}"
 
 RUN git pull
 RUN pip install -r requirements.txt
@@ -134,7 +134,8 @@ COPY scripts/local_setup.sh /tmp/local_setup.sh
 RUN /tmp/local_setup.sh $ENVIRONMENT
 # RUN rm /tmp/local_setup.sh
 
-
+RUN echo "PATH=/var/www/eldorado/:$PATH" >> /etc/environment
+RUN set -a; source /etc/environment; set +a;
 
 
 EXPOSE 8080
