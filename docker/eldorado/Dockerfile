@@ -132,9 +132,9 @@ COPY scripts/local_setup.sh /tmp/local_setup.sh
 
 # run local setup
 RUN /tmp/local_setup.sh $ENVIRONMENT
-# RUN rm /tmp/local_setup.sh
 
-RUN echo "PYTHONPATH=/var/www/eldorado/:$PYTHONPATH" >> ~/.profile
+RUN touch /etc/profile.d/eldorado.sh
+RUN echo "export PYTHONPATH=$PYTHONPATH:/var/www/eldorado/" >> /etc/profile.d/eldorado.sh
 
 
 EXPOSE 8080
