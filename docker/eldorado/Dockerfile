@@ -134,8 +134,7 @@ COPY scripts/local_setup.sh /tmp/local_setup.sh
 RUN /tmp/local_setup.sh $ENVIRONMENT
 # RUN rm /tmp/local_setup.sh
 
-RUN echo "PATH=/var/www/eldorado/:$PATH" >> /etc/environment
-RUN set -a; source /etc/environment; set +a;
+RUN echo "PYTHONPATH=/var/www/eldorado/:$PYTHONPATH" >> ~/.profile
 
 
 EXPOSE 8080
