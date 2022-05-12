@@ -9,7 +9,7 @@ Spinning up local environment
 
 * run cmd: ```docker-compose -f docker-compose.local.yml -p eldorado up```
 
-* verify successful launch by opening a browser and going to: 127.0.0.1:8000. You should see ```{"message":"Hello World"}```
+* verify successful launch by opening a browser and going to: 127.0.0.1:8080. You should see ```{"message":"Hello World"}```
 
 * verify container is up and running. and attach to container in IDE of choice.
 
