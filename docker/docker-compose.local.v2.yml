@@ -38,8 +38,8 @@ services:
     container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_PASSWORD: chel
-      POSTGRES_USER: miguel
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_USER: dev_admin
     ports:
       - "5432:5432"
     networks:
