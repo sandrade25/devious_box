@@ -3,3 +3,4 @@
 *.pub
 *.priv
 !*circus_local.ini
+docker/*
