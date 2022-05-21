@@ -131,6 +131,7 @@ COPY scripts/local_setup.sh /tmp/local_setup.sh
 # RUN dos2unix /tmp/local_setup.sh
 
 # run local setup
+RUN dos2unix /tmp/local_setup.sh
 RUN /tmp/local_setup.sh $ENVIRONMENT
 
 RUN touch /etc/profile.d/eldorado.sh
