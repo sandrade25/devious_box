@@ -1,7 +1,7 @@
 version: "3"
 services:
-  eldorado:
-    container_name: eldorado
+  eldorado_backend:
+    container_name: eldorado_backend
     build:
       context: eldorado
       dockerfile: Dockerfile
@@ -31,6 +31,20 @@ services:
         ipv4_address: 172.20.0.10
     # command:
     #     dynamodb describe-limits --endpoint-url http://dynamodb-local:5952 --region us-east-1
+
+  eldorado_frontend:
+    container_name: eldorado_frontend
+    build:
+      context: eldorado_frontend
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: local
+        TARGET_BRANCH: main
+    ports:
+      - "3000:3000"
+    networks:
+      customnetwork:
+        ipv4_address: 172.20.0.15
 
   postgres_db:
     # https://hub.docker.com/_/postgres
